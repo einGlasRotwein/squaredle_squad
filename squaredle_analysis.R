@@ -14,6 +14,13 @@ custom_theme <-
     legend.position = "top"
   )
 
+player_cols <- c(
+  jan   = "#1b9e77",
+  juli  = "#d95f02",
+  julia = "#7570b3",
+  nils  = "#e7298a"
+)
+
 sheet_url <- "sheet_url" # enter sheet url
 
 # Log in with google account (can be pre-authorized via googlesheets4)
@@ -75,7 +82,7 @@ t_tests_normal <-
 
 plot_normal <- 
   ggplot(
-    aes(x = player, y = emmean),
+    aes(x = player, y = emmean, fill = player),
     data = emmeans_normal_df
   ) +
   geom_col(colour = "black", alpha = .7) +
@@ -93,6 +100,8 @@ plot_normal <-
     bracket.size = 0.6,
     size = 5
   ) +
+  scale_fill_manual(values = player_cols, drop = FALSE) +
+  guides(fill = "none") +
   labs(title = "normal", y = "completion time (mins)") +
   custom_theme
 
@@ -135,7 +144,7 @@ t_tests_express <-
 
 plot_express <- 
   ggplot(
-    aes(x = player, y = emmean),
+    aes(x = player, y = emmean, fill = player),
     data = emmeans_express_df
   ) +
   geom_col(colour = "black", alpha = .7) +
@@ -143,6 +152,8 @@ plot_express <-
     aes(ymin = lower.CL, ymax = upper.CL),
     width = .25
   ) +
+  scale_fill_manual(values = player_cols, drop = FALSE) +
+  guides(fill = "none") +
   labs(title = "express", y = "completion time (mins)") +
   custom_theme
 
