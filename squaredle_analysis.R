@@ -41,11 +41,11 @@ data <-
   mutate(
     time = 
       map_dbl(str_split(time, ":"), ~{
-      x <- as.numeric(.x)
-      if (length(x) == 2) x[1] * 60 + x[2]
-      else if (length(x) == 3) x[1] * 3600 + x[2] * 60 + x[3]
-      else NA_real_
-    }) / 60
+        x <- as.numeric(.x)
+        if (length(x) == 2) x[1] * 60 + x[2]
+        else if (length(x) == 3) x[1] * 3600 + x[2] * 60 + x[3]
+        else NA_real_
+      }) / 60
   )
 
 normal <- data %>% filter(modus == "normal")
@@ -90,8 +90,8 @@ t_tests_normal <-
   filter(p.value < .05)
 
 # compute y-positions for the brackets (stacked above the highest completion time)
-y_top <- max(normal$time, na.rm = TRUE)
-step  <- 0.07 * (max(normal$time, na.rm = TRUE) - min(normal$time, na.rm = TRUE)) # spacing
+y_top <- log10(max(normal$time, na.rm = TRUE))
+step  <- 0.07 * (log10(max(normal$time, na.rm = TRUE)) - log10(min(normal$time, na.rm = TRUE))) # spacing
 
 t_tests_normal <-
   t_tests_normal %>%
@@ -126,6 +126,7 @@ plot_normal <-
   ) +
   scale_fill_manual(values = player_cols, drop = FALSE) +
   scale_colour_manual(values = player_cols, drop = FALSE) +
+  scale_y_log10() +
   guides(fill = "none", colour = "none") +
   labs(title = "normal", y = "completion time (mins)") +
   custom_theme
@@ -169,8 +170,8 @@ t_tests_express <-
   filter(p.value < .05)
 
 # compute y-positions for the brackets (stacked above the highest completion time)
-y_top <- max(express$time, na.rm = TRUE)
-step  <- 0.07 * (max(express$time, na.rm = TRUE) - min(express$time, na.rm = TRUE)) # spacing
+y_top <- log10(max(express$time, na.rm = TRUE))
+step  <- 0.07 * (log10(max(express$time, na.rm = TRUE)) - log10(min(express$time, na.rm = TRUE))) # spacing
 
 t_tests_express <-
   t_tests_express %>%
@@ -204,7 +205,8 @@ plot_express <-
     size = 5
   ) +
   scale_fill_manual(values = player_cols, drop = FALSE) +
-  scale_colour_manual(values = player_cols, drop = FALSE) +
+  scale_colour_manual(values = player_cols, drop = FALSE) + 
+  scale_y_log10() +
   guides(fill = "none", colour = "none") +
   labs(title = "express", y = "completion time (mins)") +
   custom_theme
